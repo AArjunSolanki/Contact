@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactCustomField;
+use App\Models\ContactFieldValue;
 use Illuminate\Http\Request;
 
 class CustomFieldController extends Controller
@@ -13,7 +14,7 @@ class CustomFieldController extends Controller
         return view('contacts.custom_fields', compact('fields'));
     }
 
-   public function storeAjax(Request $request)
+    public function storeAjax(Request $request)
     {
         $request->validate([
             'label' => 'required|string',
@@ -40,6 +41,7 @@ class CustomFieldController extends Controller
 
     public function destroy($id)
     {
+        ContactFieldValue::where('custom_field_id', $id)->delete();
         ContactCustomField::destroy($id);
         return redirect()->back()->with('success', 'Custom field deleted successfully!');
     }

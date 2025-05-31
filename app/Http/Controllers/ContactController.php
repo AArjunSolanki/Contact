@@ -141,7 +141,12 @@ class ContactController extends Controller
 
     public function destroy($id)
     {
-        Contact::destroy($id);
+        $contact = Contact::findOrFail($id);
+
+        $contact->customFieldValues()->delete();
+
+        $contact->delete(); 
+
         return response()->json(['success' => true, 'message' => 'Contact deleted.']);
     }
     public function mergeInit(Request $request)
@@ -200,7 +205,7 @@ class ContactController extends Controller
         $secondary->merged_into = $master->id;
         $secondary->save();
 
-        return redirect()->route('contacts.index')->with('success', 'Contacts successfully merged.');
+                return redirect()->route('contacts.index')->with('success', 'Contacts successfully merged.');    
     }
 
     public function ajaxCompare($idA, $idB)
